@@ -3,38 +3,87 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Country Population Lookup</title>
+<title>World Population Lookup</title>
 <style>
-  body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 1rem; }
-  h1 { text-align: center; }
-  select, button { padding: 0.5rem; margin: 0.5rem 0; width: 100%; }
-  .result { margin-top: 1rem; padding: 1rem; border: 1px solid #ccc; }
+  body {
+    font-family: Arial, sans-serif;
+    color: #eee;
+    background-color: #121212;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/9/97/The_Blue_Marble_%28remastered%29.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 1rem;
+  }
+  h1 {
+    text-align: center;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+  }
+  .container {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: auto;
+  }
+  select, button {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    width: 100%;
+    border-radius: 4px;
+    border: none;
+    font-size: 1rem;
+  }
+  select {
+    background-color: #222;
+    color: #eee;
+  }
+  button {
+    background-color: #1e88e5;
+    color: white;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #1565c0;
+  }
+  .result {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: rgba(30, 30, 30, 0.8);
+    border-radius: 4px;
+  }
 </style>
 </head>
 <body>
-<h1>🌍 Country Populations</h1>
-
-<label for="countrySelect">Choose a country:</label>
-<select id="countrySelect"></select>
-<button id="fetchLive">Get Live Data</button>
-
-<div class="result" id="output">
-  Select a country to see its population.
+<h1>🌍 World Population Lookup</h1>
+<div class="container">
+  <label for="countrySelect">Choose a country:</label>
+  <select id="countrySelect"></select>
+  <button id="fetchLive">Get Live Data</button>
+  <div class="result" id="output">Select a country to see its population.</div>
 </div>
 
 <script>
-// --- 1. Embedded data fallback ---
+// --- 1. Embedded data for 50 countries ---
 const embeddedData = {
-  "Australia": 26000000,
-  "India": 1400000000,
-  "United States": 334000000,
-  "Japan": 125000000,
-  "Canada": 38000000
+"Afghanistan": 38928346,"Albania": 2877797,"Algeria": 43851044,"Angola": 32866272,
+"Argentina": 45195774,"Australia": 25687041,"Austria": 9006398,"Bangladesh": 164689383,
+"Belgium": 11589623,"Bhutan": 771608,"Bolivia": 11673029,"Brazil": 212559417,
+"Bulgaria": 6951482,"Cambodia": 16718965,"Cameroon": 26545863,"Canada": 37742154,
+"Chile": 19116201,"China": 1439323776,"Colombia": 50882891,"Costa Rica": 5094118,
+"Croatia": 4105267,"Cuba": 11326616,"Czech Republic": 10708981,"Denmark": 5792202,
+"Dominican Republic": 10847910,"Ecuador": 17643054,"Egypt": 102334404,"Ethiopia": 114963588,
+"Finland": 5540720,"France": 65273511,"Germany": 83783942,"Ghana": 31072940,
+"Greece": 10423054,"Guatemala": 17915568,"Haiti": 11402528,"Honduras": 9904607,
+"Hungary": 9660351,"Iceland": 343599,"India": 1380004385,"Indonesia": 273523615,
+"Iran": 83992949,"Iraq": 40222493,"Ireland": 4937786,"Israel": 8655535,
+"Italy": 60461826,"Jamaica": 2961167,"Japan": 126476461,"Jordan": 10203134
 };
 
 // Populate dropdown from embedded data keys
 const select = document.getElementById('countrySelect');
-Object.keys(embeddedData).forEach(country => {
+Object.keys(embeddedData).sort().forEach(country => {
   const opt = document.createElement('option');
   opt.value = country;
   opt.textContent = country;
@@ -43,13 +92,13 @@ Object.keys(embeddedData).forEach(country => {
 
 const output = document.getElementById('output');
 
-// --- 2. Show embedded population initially ---
+// Show embedded population initially
 select.addEventListener('change', () => {
   const country = select.value;
   output.innerHTML = `📦 Embedded Data → <strong>${country}</strong>: ${embeddedData[country].toLocaleString()} people`;
 });
 
-// --- 3. Live data fetch from REST Countries ---
+// Fetch live data from REST Countries
 document.getElementById('fetchLive').addEventListener('click', () => {
   const country = select.value;
   output.textContent = "Fetching live data...";
@@ -63,7 +112,7 @@ document.getElementById('fetchLive').addEventListener('click', () => {
         output.textContent = "Live data not available, showing embedded value.";
       }
     })
-    .catch(err => {
+    .catch(() => {
       output.textContent = "Error fetching live data, showing embedded value.";
     });
 });
